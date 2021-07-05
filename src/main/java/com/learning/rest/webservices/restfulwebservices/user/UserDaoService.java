@@ -1,14 +1,17 @@
 package com.learning.rest.webservices.restfulwebservices.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class UserDaoService {
-    private static List<User> users= new ArrayList<>();
+    private static List<User> users = new ArrayList<>();
 
     private static int usersCount = 3;
 
@@ -26,13 +29,26 @@ public class UserDaoService {
         if (user.getId() == null) {
             user.setId(++usersCount);
         }
+        log.info("User = {}", user);
         users.add(user);
         return user;
     }
 
     public User findOne(int id) {
-        for (User user: users) {
-            if(user.getId() == id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public User deleteById(int id) {
+        Iterator<User> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
+            if (user.getId() == id) {
+                iterator.remove();
                 return user;
             }
         }
